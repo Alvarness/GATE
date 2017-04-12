@@ -30,6 +30,7 @@ GateJPETActor::GateJPETActor(G4String name, G4int depth):GateVActor(name, depth)
 	 mEnableInteractionTime= false;
 	 mEnableProcessName= false;
 	 mEnableEmissionPoint = false;
+	 mEnablePolarization = false;
 
 	 mFileType = " ";
 
@@ -97,6 +98,15 @@ void GateJPETActor::Construct()
 		}
 		if(mEnablePrimaryEnergy)
 			pListeVar->Branch("ParticlePrimaryEnergy", &mPrimaryEnergy, "ParticlePrimaryEnergy/D");
+		if(mEnablePolarization){
+			pListeVar->Branch("PolarizationX", &mPolarizationX, "PolarizationX/D");
+			pListeVar->Branch("PolarizationY", &mPolarizationY, "PolarizationY/D");
+			pListeVar->Branch("PolarizationZ", &mPolarizationZ, "PolarizationZ/D");
+
+			pListeVar->Branch("initialPolarizationX", &minitialPolarizationX, "initialPolarizationX/D");
+			pListeVar->Branch("initialPolarizationY", &minitialPolarizationY, "initialPolarizationY/D");
+			pListeVar->Branch("initialPolarizationZ", &minitialPolarizationZ, "initialPolarizationZ/D");
+		}
 
 	}
 }
@@ -109,6 +119,9 @@ void GateJPETActor::PreUserTrackingAction(const GateVVolume * /*v*/, const G4Tra
 		mEmissionPositionY = t->GetVertexPosition().y();
 		mEmissionPositionZ = t->GetVertexPosition().z();
 	}
+		minitialPolarizationX = t -> GetPolarization().x();
+		minitialPolarizationY = t -> GetPolarization().y();
+		minitialPolarizationZ = t -> GetPolarization().z();
 }
 
 void GateJPETActor::BeginOfEventAction(const G4Event *e)
@@ -140,6 +153,13 @@ void GateJPETActor::StandardExtractFunction(const G4Step *step)
 			mPositionY = localPosition.y();
 		if(mEnableZPosition)
 			mPositionZ = localPosition.z();
+	}
+
+	if(mEnablePolarization){
+			G4ThreeVector localPolarization = step->GetPostStepPoint()->GetPosition();
+			mPolarizationX = localPolarization.x();
+			mPolarizationY = localPolarization.y();
+			mPolarizationZ = localPolarization.z();
 	}
 
 	if(mEnableParticleName){
@@ -252,4 +272,9 @@ void GateJPETActor::SetEmissionPointEnabled(bool enableEmissionPoint)
 void GateJPETActor::SetPrimaryEnergy(bool enablePrimaryEnergy)
 {
 	mEnablePrimaryEnergy = enablePrimaryEnergy;
+}
+
+void GateJPETActor::SetPolarization(bool mEnablePolarization)
+{
+	mEnablePolarization = mEnablePolarization;
 }

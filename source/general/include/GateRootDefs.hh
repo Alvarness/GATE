@@ -118,8 +118,8 @@ class GateRootHitBuffer
     inline void SetPos(const G4ThreeVector& aPosition)
       {
       	posX = aPosition.x() / mm;
-	posY = aPosition.y() / mm;
-	posZ = aPosition.z() / mm;
+	      posY = aPosition.y() / mm;
+	      posZ = aPosition.z() / mm;
       }
 
     //! Returns the local position in G4 units (conversion from millimeters)
@@ -129,8 +129,8 @@ class GateRootHitBuffer
     inline void SetLocalPos(const G4ThreeVector& aPosition)
       {
       	localPosX = aPosition.x() / mm;
-	localPosY = aPosition.y() / mm;
-	localPosZ = aPosition.z() / mm;
+	      localPosY = aPosition.y() / mm;
+	     localPosZ = aPosition.z() / mm;
       }
 
     //! Returns the source position in G4 units (conversion from millimeters)
@@ -140,8 +140,8 @@ class GateRootHitBuffer
     inline void SetSourcePos(const G4ThreeVector& aPosition)
       {
       	sourcePosX = aPosition.x() / mm;
-	sourcePosY = aPosition.y() / mm;
-	sourcePosZ = aPosition.z() / mm;
+	      sourcePosY = aPosition.y() / mm;
+	      sourcePosZ = aPosition.z() / mm;
       }
 
     //! Returns the scanner axial position in G4 units (conversion from millimeters)
@@ -195,6 +195,8 @@ class GateRootHitBuffer
     Float_t  energyInitial,energyFinal;
     Float_t  generatedEnergy;
     Float_t  generatedMomentumX,generatedMomentumY,generatedMomentumZ;
+    Float_t  generatedPolarizationX,generatedPolarizationY,generatedPolarizationZ;
+    Float_t  PolarizationX,PolarizationY,PolarizationZ;
     //@}
 
 };

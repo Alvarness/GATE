@@ -120,6 +120,12 @@ void GateRootHitBuffer::Clear()
   generatedMomentumX = 0;
   generatedMomentumY = 0;
   generatedMomentumZ = 0;
+  generatedPolarizationX = 0;
+  generatedPolarizationY = 0;
+  generatedPolarizationZ = 0;
+  PolarizationX = 0;
+  PolarizationY = 0;
+  PolarizationZ = 0;
 
   strcpy (processName, " ");
   strcpy (comptonVolumeName," ");
@@ -177,6 +183,12 @@ void GateRootHitBuffer::Fill(GateCrystalHit* aHit)
   generatedMomentumX = aHit->GetGeneratedMomentum().x();
   generatedMomentumY = aHit->GetGeneratedMomentum().y();
   generatedMomentumZ = aHit->GetGeneratedMomentum().z();
+  generatedPolarizationX = aHit->GetGeneratedPolarization().x();
+  generatedPolarizationY = aHit->GetGeneratedPolarization().y();
+  generatedPolarizationZ = aHit->GetGeneratedPolarization().z();
+  PolarizationX = aHit->GetPolarization().x();
+  PolarizationY = aHit->GetPolarization().y();
+  PolarizationZ = aHit->GetPolarization().z();
 // HDS : septal
 	septalNb = aHit->GetNSeptal();
 
@@ -250,6 +262,8 @@ GateCrystalHit* GateRootHitBuffer::CreateHit()
 	  aHit->SetNSeptal( septalNb );  // HDS : septal penetration
     aHit->SetGeneratedEnergy(0.);
     aHit->SetGeneratedMomentum( G4ThreeVector(0., 0., 0. )  );
+    aHit->SetGeneratedPolarization( G4ThreeVector(0., 0., 0. )  );
+    aHit->SetPolarization( G4ThreeVector(0., 0., 0. )  );
     return aHit;
 }
 
@@ -303,6 +317,12 @@ void GateHitTree::Init(GateRootHitBuffer& buffer)
     Branch("generatedMomentumX",&buffer.generatedMomentumX,"generatedMomentumX/F");
     Branch("generatedMomentumY",&buffer.generatedMomentumY,"generatedMomentumY/F");
     Branch("generatedMomentumZ",&buffer.generatedMomentumZ,"generatedMomentumZ/F");
+    Branch("generatedPolarizationX",&buffer.generatedPolarizationX,"generatedPolarizationX/F");
+    Branch("generatedPolarizationY",&buffer.generatedPolarizationY,"generatedPolarizationY/F");
+    Branch("generatedPolarizationZ",&buffer.generatedPolarizationZ,"generatedPolarizationZ/F");
+    Branch("PolarizationX",&buffer.PolarizationX,"PolarizationX/F");
+    Branch("PolarizationY",&buffer.PolarizationY,"PolarizationY/F");
+    Branch("PolarizationZ",&buffer.PolarizationZ,"PolarizationZ/F");
     // HDS : record septal penetration
     if (GateRootDefs::GetRecordSeptalFlag())	Branch("septalNb",   &buffer.septalNb,"septalNb/I");
 }
@@ -352,6 +372,12 @@ void GateHitTree::SetBranchAddresses(TTree* hitTree,GateRootHitBuffer& buffer)
   hitTree->SetBranchAddress("generatedMomentumX",&buffer.generatedMomentumX);
   hitTree->SetBranchAddress("generatedMomentumY",&buffer.generatedMomentumY);
   hitTree->SetBranchAddress("generatedMomentumZ",&buffer.generatedMomentumZ);
+  hitTree->SetBranchAddress("generatedPolarizationX",&buffer.generatedPolarizationX);
+  hitTree->SetBranchAddress("generatedPolarizationY",&buffer.generatedPolarizationY);
+  hitTree->SetBranchAddress("generatedPolarizationZ",&buffer.generatedPolarizationZ);
+  hitTree->SetBranchAddress("PolarizationX",&buffer.PolarizationX);
+  hitTree->SetBranchAddress("PolarizationY",&buffer.PolarizationY);
+  hitTree->SetBranchAddress("PolarizationZ",&buffer.PolarizationZ);
 }
 
 

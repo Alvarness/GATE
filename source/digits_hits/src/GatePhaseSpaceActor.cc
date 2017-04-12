@@ -67,6 +67,7 @@ GatePhaseSpaceActor::GatePhaseSpaceActor(G4String name, G4int depth):
   bEnableCompact = false;
   bEnableEmissionPoint = false;
   bEnablePDGCode = false;
+  bEnablePolarization = true;
 
   bSpotID = 0;
   bSpotIDFromSource = " ";
@@ -78,7 +79,7 @@ GatePhaseSpaceActor::GatePhaseSpaceActor(G4String name, G4int depth):
   pIAEAheader = 0;
   mFileSize = 0;
   GateDebugMessageDec("Actor", 4, "GatePhaseSpaceActor() -- end\n");
-  
+
   emcalc = new G4EmCalculator;
 }
 // --------------------------------------------------------------------
@@ -132,7 +133,7 @@ void GatePhaseSpaceActor::Construct() {
     if (EnableElectronicDEDX) pListeVar->Branch("StepLength", &stepLength, "stepLength/F");
     if (EnableElectronicDEDX) pListeVar->Branch("Edep", &edep, "Edep/F");
     if (EnableTotalDEDX) pListeVar->Branch("TotalDEDX", &totalDEDX, "totalDEDX/F");
-    
+
     if (EnableEkine) pListeVar->Branch("Ekine", &e, "Ekine/F");
     if (EnableEkine) pListeVar->Branch("Ekpost", &ekPost, "Ekpost/F");
     if (EnableEkine) pListeVar->Branch("Ekpre", &ekPre, "Ekpre/F");
@@ -149,12 +150,17 @@ void GatePhaseSpaceActor::Construct() {
     if (EnableProdVol && bEnableCompact == false) pListeVar->Branch("ProductionVolume", vol, "ProductionVolume/C");
     if (EnableProdProcess && bEnableCompact == false) pListeVar->Branch("CreatorProcess", creator_process, "CreatorProcess/C");
     if (EnableProdProcess && bEnableCompact == false) pListeVar->Branch("ProcessDefinedStep", pro_step, "ProcessDefinedStep/C");
-    if (bEnableCompact == false) pListeVar->Branch("TrackID", &trackid, "TrackID/I");   
+    if (bEnableCompact == false) pListeVar->Branch("TrackID", &trackid, "TrackID/I");
     if (bEnableCompact == false) pListeVar->Branch("ParentID", &parentid, "ParentID/I");
     if (bEnableCompact == false) pListeVar->Branch("EventID", &eventid, "EventID/I");
     if (bEnableCompact == false) pListeVar->Branch("RunID", &runid, "RunID/I");
     if (bEnablePrimaryEnergy) pListeVar->Branch("PrimaryEnergy", &bPrimaryEnergy, "primaryEnergy/F");
     if (bEnablePDGCode || bEnableCompact) pListeVar->Branch("PDGCode", &bPDGCode, "PDGCode/I");
+    if (bEnablePolarization){
+      pListeVar->Branch("PolarizationX", &bPolarizationX, "PolarizationX/F");
+      pListeVar->Branch("PolarizationY", &bPolarizationY, "PolarizationY/F");
+      pListeVar->Branch("PolarizationZ", &bPolarizationZ, "PolarizationZ/F");
+    }
     if (bEnableEmissionPoint) {
       pListeVar->Branch("EmissionPointX", &bEmissionPointX, "EmissionPointX/F");
       pListeVar->Branch("EmissionPointY", &bEmissionPointY, "EmissionPointY/F");
@@ -388,6 +394,12 @@ void GatePhaseSpaceActor::UserSteppingAction(const GateVVolume *, const G4Step *
   dy = localMomentum.y();
   dz = localMomentum.z();
 
+  if(bEnablePolarization){
+    const G4ThreeVector polarization = step->GetTrack()->GetPolarization();
+    bPolarizationX = polarization.x();
+    bPolarizationY = polarization.y();
+    bPolarizationZ = polarization.z();
+  }
 
 
   //-------------Write weight of the steps presents at the simulation-------------
@@ -416,25 +428,25 @@ void GatePhaseSpaceActor::UserSteppingAction(const GateVVolume *, const G4Step *
 
   c = step->GetTrack()->GetDefinition()->GetAtomicNumber();//std::floor(stepPoint->GetCharge()+0.1);  //floor & +0.1 to avoid round off error
   m = step->GetTrack()->GetDefinition()->GetAtomicMass();
-  
-  if (EnableElectronicDEDX || EnableTotalDEDX) 
+
+  if (EnableElectronicDEDX || EnableTotalDEDX)
   {
 	  G4Material* material = step->GetPreStepPoint()->GetMaterial();//->GetName();
 	  G4double energy1 = step->GetPreStepPoint()->GetKineticEnergy();
 	  G4double energy2 = step->GetPostStepPoint()->GetKineticEnergy();
 	  G4double energy=(energy1+energy2)/2;
 	  G4ParticleDefinition* partname = step->GetTrack()->GetDefinition();//->GetParticleName();
-	  
+
 	  elecDEDX = emcalc->ComputeElectronicDEDX(energy, partname, material);
 	  stepLength=step->GetStepLength();
-		  
+
 	  edep = step->GetTotalEnergyDeposit()*w;
 	  totalDEDX = emcalc->ComputeTotalDEDX(energy, partname, material);
   }
-  
+
   //elecDEDX= 1.;
   //totalDEDX=2.;
-  
+
   //G4cout << st << " " << step->GetTrack()->GetDefinition()->GetAtomicMass() << " " << step->GetTrack()->GetDefinition()->GetPDGMass() << Gateendl;
 
   //----------Process name at origin Track--------------------

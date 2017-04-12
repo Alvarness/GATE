@@ -8,6 +8,8 @@
 
 #include "GateBackToBack.hh"
 
+#include "TMath.h"
+
 #include "G4PhysicalConstants.hh"
 #include "GateConstants.hh"
 
@@ -40,13 +42,14 @@ void GateBackToBack::GenerateVertex( G4Event* aEvent, G4bool accolinearityFlag)
   //G4cout<<"m_accoValue  = "<< m_source->GetAccoValue() << Gateendl;
 
   m_source->GeneratePrimaryVertex( aEvent );
-  G4PrimaryParticle* particle = aEvent->GetPrimaryVertex( 0 )->GetPrimary( 0 );
+  G4PrimaryParticle* particle  = aEvent->GetPrimaryVertex( 0 )->GetPrimary( 0 );
   G4PrimaryParticle* particle1 = aEvent->GetPrimaryVertex( 0 )->GetPrimary( 1 );
 
   if( accolinearityFlag == true )
     {
 
       G4ThreeVector gammaMom = particle->GetMomentum();
+
 
       G4double dev = CLHEP::RandGauss::shoot( 0.,m_source->GetAccoValue() / GateConstants::fwhm_to_sigma );
       G4double Phi1 = ( twopi * G4UniformRand() )/2. ;
@@ -56,8 +59,15 @@ void GateBackToBack::GenerateVertex( G4Event* aEvent, G4bool accolinearityFlag)
 
       DirectionPhoton.rotateUz(gammaMom);
 
+
+
+      // polarization1 = polarization1.Rotate(randomPhi, Momentum1);
+
       particle1->SetMomentum( DirectionPhoton.x(),
                               DirectionPhoton.y(), DirectionPhoton.z() );
+
+
+      // polarization1.Rotate(TMath::Pi()/2, Momentum1);
       particle->SetMomentum( -gammaMom.x(),
                              -gammaMom.y(), -gammaMom.z() );
 
@@ -74,6 +84,23 @@ void GateBackToBack::GenerateVertex( G4Event* aEvent, G4bool accolinearityFlag)
 
       G4ThreeVector gammaMom = particle->GetMomentum();
       particle1->SetMomentum( -gammaMom.x(),-gammaMom.y(),-gammaMom.z() );
+
+      G4ThreeVector polarization1 = gammaMom.orthogonal().unit();
+
+
+      particle1->SetPolarization( polarization1 );
+
+      polarization1 = polarization1.rotate( twopi * G4UniformRand() , gammaMom);
+
+      // polarization1.Rotate(randomPhi, Momentum1);
+      // polarization1 = polarization1.Unit();
+
+      polarization1 = polarization1.rotate( twopi/4.0, gammaMom);
+      // polarization1.Rotate(TMath::Pi()/2, Momentum1);
+      particle->SetPolarization( polarization1 );
+
+
+
 
      /* G4ThreeVector gammaMom1 = particle1->GetMomentum();
 

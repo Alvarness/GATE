@@ -90,6 +90,8 @@ private:
   G4double m_energyFinal;     // energy of partice after hit
   G4double m_generatedEnergy; // generated kinetic energy of the particle (at the begining of track)
   G4ThreeVector m_generatedMomentum; // generated momentum of the particle (at the begining of track)
+  G4ThreeVector m_generatedPolarization;
+  G4ThreeVector m_Polarization;
 
   // To use with GateROOTBasicOutput classes
   G4ThreeVector pos;  // position
@@ -132,6 +134,14 @@ private:
 
       inline void  SetGeneratedMomentum(const G4ThreeVector& xyz) { m_generatedMomentum = xyz;}
       inline const G4ThreeVector& GetGeneratedMomentum() const         { return m_generatedMomentum; }
+
+      inline void  SetGeneratedPolarization(const G4ThreeVector& xyz) { m_generatedPolarization = xyz;}
+      inline const G4ThreeVector& GetGeneratedPolarization() const         { return m_generatedPolarization; }
+
+      inline void  SetPolarization(const G4ThreeVector& xyz) { m_Polarization = xyz;}
+      inline const G4ThreeVector& GetPolarization() const         { return m_Polarization; }
+
+
 
       inline void  SetGeneratedEnergy(const G4double j) { m_generatedEnergy = j;}
       inline G4double GetGeneratedEnergy()         { return m_generatedEnergy; }

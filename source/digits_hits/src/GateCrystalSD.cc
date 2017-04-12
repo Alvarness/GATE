@@ -129,6 +129,9 @@ G4bool GateCrystalSD::ProcessHits(G4Step*aStep, G4TouchableHistory*)
   G4ThreeVector localPosition = volumeID.MoveToBottomVolumeFrame(position);
 
 
+  G4ThreeVector polarization = newStepPoint->GetPolarization();
+  G4ThreeVector initialpolarization = oldStepPoint->GetPolarization();
+
 
   G4double finalEnergy = newStepPoint->GetTotalEnergy();
   G4double initialEnergy = oldStepPoint->GetTotalEnergy();
@@ -183,6 +186,8 @@ G4bool GateCrystalSD::ProcessHits(G4Step*aStep, G4TouchableHistory*)
   aHit->SetSystemID(system->GetItsNumber());
   aHit->SetInitialEnergy(initialEnergy);
   aHit->SetFinalEnergy(finalEnergy);
+  aHit->SetPolarization(polarization);
+  aHit->SetGeneratedPolarization(initialpolarization);
 
   // Ask the system to compute the output volume ID and store it into the hit
 

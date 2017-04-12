@@ -30,6 +30,7 @@ GateJPETActorMessenger::~GateJPETActorMessenger()
 	delete pEnableProcessNameCmd;
 	delete pEnableEmissionPointCmd;
 	delete pEnablePrimaryEnergyCmd;
+	delete pEnablePolarizationCmd;
 }
 
 void GateJPETActorMessenger::BuildCommands(G4String base)
@@ -120,6 +121,12 @@ void GateJPETActorMessenger::BuildCommands(G4String base)
 	guidance = "Save particle's primary energy";
 	pEnablePrimaryEnergyCmd->SetGuidance(guidance);
 	pEnablePrimaryEnergyCmd->SetParameterName("State",false);
+
+	bb = base+"/enablePolarization";
+	pEnablePolarizationCmd = new G4UIcmdWithABool(bb,this);
+	guidance = "Save particle's polarization";
+	pEnablePolarizationCmd->SetGuidance(guidance);
+	pEnablePolarizationCmd->SetParameterName("State",false);
 }
 
 void GateJPETActorMessenger::SetNewValue(G4UIcommand* command, G4String param)
@@ -165,6 +172,9 @@ void GateJPETActorMessenger::SetNewValue(G4UIcommand* command, G4String param)
 
 	if(command == pEnablePrimaryEnergyCmd)
 		pActor->SetPrimaryEnergy(pEnablePrimaryEnergyCmd->GetNewBoolValue(param));
+
+	if(command == pEnablePolarizationCmd)
+		pActor->SetPrimaryEnergy(pEnablePolarizationCmd->GetNewBoolValue(param));
 
 	GateActorMessenger::SetNewValue(command ,param );
 }

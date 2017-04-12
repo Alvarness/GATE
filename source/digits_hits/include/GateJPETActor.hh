@@ -131,6 +131,8 @@ public:
 	 */
 	void SetPrimaryEnergy(bool enablePrimaryEnergy);
 
+	void SetPolarization(bool enablePolarization);
+
 protected:
 	GateJPETActor(G4String name, G4int depth=0);
 
@@ -164,6 +166,7 @@ protected:
 	/*Record primary energy*/
 	bool mEnablePrimaryEnergy;
 
+	bool mEnablePolarization;
 	//Values
 	double mPositionX;
 	double mPositionY;
@@ -180,6 +183,12 @@ protected:
 	double mEmissionPositionY;
 	double mEmissionPositionZ;
 	double mPrimaryEnergy;
+	double mPolarizationX;
+	double mPolarizationY;
+	double mPolarizationZ;
+	double minitialPolarizationX;
+	double minitialPolarizationY;
+	double minitialPolarizationZ;
 	//Variables need to save data
 	TString mFileType;
 	TFile * pFile;

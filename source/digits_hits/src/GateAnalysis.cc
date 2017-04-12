@@ -155,6 +155,7 @@ void GateAnalysis::RecordEndOfEvent(const G4Event* event)
           G4int primaryID  = 0;
           G4double iEnergy = 0;
           G4ThreeVector iMomentum = G4ThreeVector();
+          G4ThreeVector iPolariztion = G4ThreeVector();
 
           G4int photon1_phantom_compton = 0;
           G4int photon2_phantom_compton = 0;

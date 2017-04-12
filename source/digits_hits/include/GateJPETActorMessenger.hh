@@ -41,6 +41,7 @@ protected:
 	G4UIcmdWithABool* pEnableProcessNameCmd;
 	G4UIcmdWithABool* pEnableEmissionPointCmd;
 	G4UIcmdWithABool* pEnablePrimaryEnergyCmd;
+	G4UIcmdWithABool* pEnablePolarizationCmd;
 };
 #endif //GATEJPETACTORMESSANGER_HH/
 #endif //G4ANALYSIS_USE_ROOT

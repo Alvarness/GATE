@@ -28,7 +28,7 @@ GatePhaseSpaceActorMessenger::GatePhaseSpaceActorMessenger(GatePhaseSpaceActor* 
 
 //-----------------------------------------------------------------------------
 GatePhaseSpaceActorMessenger::~GatePhaseSpaceActorMessenger()
-{ 
+{
   //____________________
   delete pEnableChargeCmd;
   delete pEnableElectronicDEDXCmd;
@@ -59,6 +59,7 @@ GatePhaseSpaceActorMessenger::~GatePhaseSpaceActorMessenger()
   delete bEnableCompactCmd;
   delete bEnableEmissionPointCmd;
   delete bEnablePDGCodeCmd;
+  delete bEnablePolarizationCmd;
 }
 //-----------------------------------------------------------------------------
 
@@ -68,7 +69,7 @@ void GatePhaseSpaceActorMessenger::BuildCommands(G4String base)
 {
   G4String guidance;
   G4String bb;
-  
+
   //________________________________
   bb = base+"/enableCharge";
   pEnableChargeCmd = new G4UIcmdWithABool(bb,this);
@@ -82,13 +83,13 @@ void GatePhaseSpaceActorMessenger::BuildCommands(G4String base)
   guidance = "Save electronic energy loss de/dx of particles in the phase space file.";
   pEnableElectronicDEDXCmd->SetGuidance(guidance);
   pEnableElectronicDEDXCmd->SetParameterName("State",false);
-  
+
   bb = base+"/enableTotalDEDX";
   pEnableTotalDEDXCmd = new G4UIcmdWithABool(bb,this);
   guidance = "Save total energy loss de/dx  of particles in the phase space file.";
   pEnableTotalDEDXCmd->SetGuidance(guidance);
   pEnableTotalDEDXCmd->SetParameterName("State",false);
-  
+
   bb = base+"/enableEkine";
   pEnableEkineCmd = new G4UIcmdWithABool(bb,this);
   guidance = "Save kinetic energy of particles in the phase space file.";
@@ -232,6 +233,10 @@ void GatePhaseSpaceActorMessenger::BuildCommands(G4String base)
   guidance = "Output the PDGCode instead of the ParticleName.";
   bEnablePDGCodeCmd->SetGuidance(guidance);
 
+  bb = base+"/enablePolarization";
+  bEnablePolarizationCmd = new G4UIcmdWithABool(bb,this);
+  guidance = "Output the particle polarization.";
+  bEnablePolarizationCmd->SetGuidance(guidance);
 
 }
 //-----------------------------------------------------------------------------
@@ -271,6 +276,7 @@ void GatePhaseSpaceActorMessenger::SetNewValue(G4UIcommand* command, G4String pa
   if(command == bSpotIDFromSourceCmd) {pActor->SetSpotIDFromSource(param);pActor->SetIsSpotIDEnabled();};
   if(command == bEnablePDGCodeCmd) pActor->SetEnablePDGCode(bEnablePDGCodeCmd->GetNewBoolValue(param));
   if(command == bEnableCompactCmd) pActor->SetEnabledCompact(bEnableCompactCmd->GetNewBoolValue(param));
+  if(command == bEnablePolarizationCmd) pActor->SetEnablePolarization(bEnablePolarizationCmd->GetNewBoolValue(param));
 
   GateActorMessenger::SetNewValue(command ,param );
 }

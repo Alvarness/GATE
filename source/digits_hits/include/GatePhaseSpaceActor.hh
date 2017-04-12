@@ -74,7 +74,7 @@ class GatePhaseSpaceActor : public GateVActor
   void SetIsElectronicDEDXEnabled(bool b) {EnableElectronicDEDX = b;}
   void SetIsTotalDEDXEnabled(bool b) {EnableTotalDEDX = b;}
   //_______________________________________________
-  
+
   void SetUseVolumeFrame(bool b){mUseVolFrame=b;}
   bool GetUseVolumeFrame(){return mUseVolFrame;}
 
@@ -96,6 +96,7 @@ class GatePhaseSpaceActor : public GateVActor
   G4String GetSpotIDFromSource(){return bSpotIDFromSource;}
   void SetEnabledCompact(bool b){bEnableCompact = b;}
   void SetEnablePDGCode(bool b){bEnablePDGCode = b;}
+  void SetEnablePolarization(bool b){bEnablePolarization = b;}
 
 protected:
   GatePhaseSpaceActor(G4String name, G4int depth=0);
@@ -105,7 +106,7 @@ protected:
 
   TFile * pFile;
   TTree * pListeVar;
-  
+
   bool EnableCharge;
   bool EnableElectronicDEDX;
   bool EnableTotalDEDX;
@@ -134,11 +135,13 @@ protected:
   float bPrimaryEnergy;
   bool bEnableEmissionPoint;
   float bEmissionPointX,bEmissionPointY,bEmissionPointZ;
+  float bPolarizationX,bPolarizationY,bPolarizationZ;
   bool bEnableSpotID;
   G4String bSpotIDFromSource;
   int bSpotID;
   bool bEnableCompact;
   bool bEnablePDGCode;
+  bool bEnablePolarization;
   long int bPDGCode;
 
   double mFileSize;
@@ -148,13 +151,13 @@ protected:
   bool mIsFistStep;
 
   Char_t  pname[256];
-  
+
   G4int c;
   float elecDEDX;
   float totalDEDX;
   float stepLength;
   float edep;
-  
+
   float x;
   float y;
   float z;
@@ -176,7 +179,8 @@ protected:
   int parentid;
   int eventid;
   int runid;
- 
+
+
 
   G4EmCalculator * emcalc;
   GatePhaseSpaceActorMessenger* pMessenger;
