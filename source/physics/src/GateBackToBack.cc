@@ -86,18 +86,19 @@ void GateBackToBack::GenerateVertex( G4Event* aEvent, G4bool accolinearityFlag)
       particle1->SetMomentum( -gammaMom.x(),-gammaMom.y(),-gammaMom.z() );
 
       G4ThreeVector polarization1 = gammaMom.orthogonal().unit();
+      G4ThreeVector polarization2;
 
-
-      particle1->SetPolarization( polarization1 );
 
       polarization1 = polarization1.rotate( twopi * G4UniformRand() , gammaMom);
+      particle1->SetPolarization( polarization1 );
 
+      polarization2 = polarization1;
       // polarization1.Rotate(randomPhi, Momentum1);
       // polarization1 = polarization1.Unit();
 
-      polarization1 = polarization1.rotate( twopi/4.0, gammaMom);
+      polarization2 = polarization2.rotate( twopi/4.0, gammaMom);
       // polarization1.Rotate(TMath::Pi()/2, Momentum1);
-      particle->SetPolarization( polarization1 );
+      particle->SetPolarization( polarization2 );
 
 
 
